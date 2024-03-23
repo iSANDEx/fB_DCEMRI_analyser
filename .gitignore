@@ -396,4 +396,9 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# JU User defined
 .DS_Store
+.vscode/settings.json
+ImageJ/LUT.xlsx
+**/*.ipynb_checkpoints/
