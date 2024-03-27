@@ -11,6 +11,20 @@ function constArray(size, boolVal) {
 	return booleanArray;
 }
 
+function getRefVolFromJSON(path2json) {
+	jsonFile = File.openAsString(path2json);
+	arrayJson =split(jsonFile, ","); 
+	// Field of interest is "Registration Details" -> "reference volume"
+	for (idx=0; idx<arrayJson.length; idx++) {
+		if (startsWith(arrayJson[idx], " \"reference volume\"")) {
+			referenceVolumeStr = split(arrayJson[idx], ":");
+			reference_volume = String.format("%03.0f", parseInt(referenceVolumeStr[1]));
+			return reference_volume;
+		}
+	}
+	return false;
+}
+
 // End of auxiliar functions
 /**************************************************/
 // Start fresh closing everything before running
@@ -23,28 +37,13 @@ close("Results");
 FILESEP = File.separator;
 EOFDirList = "/"; // See getFileList description at https://imagej.net/ij/developer/macro/functions.html#G
 TESTFLDR = "tests";
-OUTPUTFLDR = "csv_output";
+OUTPUTFLDR = "output" + FILESEP + "roi_csv";
+LOGFLDR = "logs";
 REFTEST = "Test000";
 DATASUBFLDR = "datasets";
 ROILOCATION = "landmarks";
 
 /**************************************************************/
-// Tests number and reference volumes (this can be taken from the description.json file on each Test folder):
-testNro = Array.getSequence(10);
-refVol = newArray(0, 1, 2, 1, 2, 1, 1, 2, 2, 2, 0);
-roiFrame = Array.copy(refVol);
-for (idxVol=0; idxVol < refVol.length; idxVol++) {
-	vol_i = refVol[idxVol];
-	if (vol_i == 0) {
-		roiFrame[idxVol]  = "002";
-	} else if (vol_i == 1) {
-		roiFrame[idxVol] = "001";
-	} else if (vol_i == 2) {
-		roiFrame[idxVol] = "002";
-	} else {
-		roiFrame[idxVol] = "000";
-	}		 
-}
 roiFilenames = "RoiSet-Frame";
 /**************************************************************/
 
@@ -69,7 +68,7 @@ Dialog.addDirectory("Select the Root folder hosting the data:", defaultPath); //
 Dialog.addCheckbox("Check to hide the images during execution (good to save computational resources)", true); // var hideImages
 Dialog.addCheckbox("Check to run as a batch process (i.e. process all images at once)", false); // var batchMode
 Dialog.addCheckbox("Check to run on debug mode?", false); // var DEBUGMODE; verbose level of the log file
-Dialog.addCheckbox("Check to run on test mode (doesn't process anything) ", false); // var testRun
+//Dialog.addCheckbox("Check to run on test mode (doesn't process anything) ", false); // var testRun
 
 Dialog.show();
 
@@ -78,11 +77,12 @@ srcPath = Dialog.getString();
 hideImages= Dialog.getCheckbox();
 batchMode = Dialog.getCheckbox();
 debugMode = Dialog.getCheckbox();
-testRun= Dialog.getCheckbox();
+testRun= false; // Dialog.getCheckbox();
 
 // Define the main paths based on the selections made:
 path2Tests= srcPath+ TESTFLDR + FILESEP;
 path2Output= srcPath+ OUTPUTFLDR + FILESEP;
+path2Logs= srcPath+ LOGFLDR + FILESEP;
 
 // Get the number of available tests to review (it gives the option to select which ones to process)
 //listOfTests = getFileList(path2Tests);
@@ -127,13 +127,14 @@ path2Ref = path2Tests + REFTEST + FILESEP + DATASUBFLDR + FILESEP;
 listOfPatients = getFileList(path2Ref);
 
 if ( !testRun ) {
-	setBatchMode(batchMode);
+	setBatchMode(hideImages);
 	for (idxTest=0; idxTest < tests_to_process.length; idxTest++) {
 		// Skips the tests unselected in the GUI:
 		// For each Test folder, we loop over the patients and visits to extract the mean signal intensity over time for each ROI:
 		test = tests_to_process[idxTest] + FILESEP;
 		testNro = substring(test, 4, test.length-1);
 		path_to_test = path2Tests + test + DATASUBFLDR + FILESEP;
+		roiFrame = getRefVolFromJSON(path2Tests + test + "description.json");
 		if (debugMode) {
 			print("Processing test folder " + test);
 		} // if (debugMode)
@@ -178,7 +179,7 @@ if ( !testRun ) {
 					// For each of these dataset, we find the corresponding ROI in the REFTEST folder:
 					path2ROIs= path2Ref + currPatient + currVisit + ROILOCATION +FILESEP;
 					run("Set Measurements...", "area mean standard min display redirect=None decimal=3");
-					roiName = roiFilenames + roiFrame[testNro];
+					roiName = roiFilenames + roiFrame;
 					if (debugMode) {
 						print("RoiFrame: " + roiName);
 					}
@@ -194,7 +195,7 @@ if ( !testRun ) {
 							run("Measure Stack...", "channels frames order=tcz");
 						} // for indROI
 						// Save the data as CSV file
-						saveAs("Results", path2Output + currVisit.replace(FILESEP,"") + "_" + test.replace(FILESEP, "") + "_" + roiName+".csv");
+						saveAs("Results", path2Output + currVisit.replace(FILESEP,"_") + test.replace(FILESEP, "-") + roiName+".csv");
 						// Clean ROI content
 						roiManager("reset");
 						// Reset Results windows
@@ -218,5 +219,5 @@ selectWindow("Log");
 print("All done, bye!");
 getDateAndTime(year, month, dayOfWeek, dayOfMonth, hour, minute, second, msec);
 timestamp = String.format("%.0f", year)+String.format("%02.0f", month)+String.format("%02.0f", dayOfMonth) + "T" + String.format("%02.0f", hour) + String.format("%02.0f", minute) + String.format("%02.0f", second);
-saveAs("Text",path2Output + "Log_" + timestamp +".txt" );
+saveAs("Text", path2Logs + "IJ_Log_ExportROIvalues_" + timestamp +".txt" );
 return;

@@ -26,7 +26,7 @@ close("Results");
 FILESEP = File.separator;
 EOFDirList = "/"; // See getFileList description at https://imagej.net/ij/developer/macro/functions.html#G
 TESTFLDR = "tests";
-LOGFLDR = "logs
+LOGFLDR = "logs";
 OUTPUTFLDR = "output" + FILESEP + "pub";
 REFTEST = "Test000";
 DATASUBFLDR = "datasets";
@@ -64,17 +64,15 @@ Dialog.addDirectory("Select the Root folder hosting the data:", defaultPath); //
 // Dialog.addCheckbox("Check to run as a batch process (i.e. process all images at once)", false); // var batchMode
 Dialog.addCheckbox("Check to run on debug mode?", false); // var DEBUGMODE; verbose level of the log file
 //Dialog.addCheckbox("Check to run on test mode (doesn't process anything) ", false); // var testRun
-Dialog.addCheckbox("Check to save the outputs as animated GIF files) ", false); // var testRun
 
 Dialog.show();
 
 /** To recover the variables from each box component, they must be retrieve in the same order as defined when creating the dialog box **/
 srcPath = Dialog.getString();
-hideImages= true; // Dialog.getCheckbox();
+hideImages= false; // Dialog.getCheckbox();
 batchMode = false; // Dialog.getCheckbox();
 debugMode = Dialog.getCheckbox();
 testRun= false; // Dialog.getCheckbox();
-saveAsGif = Dialog.getCheckbox();
 
 path2Tests= srcPath+ TESTFLDR + FILESEP;
 path2Output= srcPath+ OUTPUTFLDR + FILESEP;
@@ -108,8 +106,8 @@ patientsList = List.getList();
 	
 // Dataset must be selected individually if not run as Batch Process:
 Dialog.create("Select the dataset to review:");
-Dialog.addRadioButtonGroup("1) Select from which test (see description of each test below):", optionList, 1, optionList.length, optionList[0]);
-Dialog.addRadioButtonGroup("2) Select patient name:", patientList , 1, patientList.length, patientList[0]);
+Dialog.addRadioButtonGroup("1) Select from which test (see description of each test below):", optionList, 1, optionList.length, 0);
+Dialog.addRadioButtonGroup("2) Select patient name:", patientList , 1, patientList .length, 0);
 Dialog.show();
 
 List.setList(testsList);
@@ -132,8 +130,11 @@ if ( ! testRun) {
 			currPatient = listOfPatients[idxPatient].replace(EOFDirList, FILESEP);
 			path2Patient = path2Test + currPatient;
 			listOfVisits = getFileList(path2Patient);
+			RoiSetCounter = 0;
 			for (idxVisit = 0; idxVisit < listOfVisits.length; idxVisit++) {
 				currVisit = listOfVisits[idxVisit].replace(EOFDirList, FILESEP);
+				VisitName = split(currVisit,"-");
+				visitID = VisitName[1];
 				path2Visit = path2Patient + currVisit;
 				// Load the Nifti image:
 				path2Nifti = path2Visit + currVisit.replace(FILESEP, ".nii.gz");
@@ -143,15 +144,16 @@ if ( ! testRun) {
 					niiFileID = getImageID();
 					run("Flip Vertically", "stack");
 					// Convert image to RGB so can overlay ROI as colour draw
-					selectImage(niiFileID);
-					run("RGB Color");
-					// We need to get information about time and z axes:
+					//selectImage(niiFileID);
+					//run("RGB Color");
+					// Additionally, will need to get information about time and z axes:
 					Stack.getDimensions(width, height, channels, slices, frames);
 					if (debugMode) {
 						print("Image contains " + frames + " timepoints");
 					}
 					// For each of these dataset, we find the corresponding ROI in the REFTEST folder:
 					path2ROIs= path2Ref + currPatient + currVisit + ROILOCATION +FILESEP;
+					run("Set Measurements...", "area mean standard min display redirect=None decimal=3");
 					roiName = roiFilenames + roiFrame;
 					print("RoiFrame: " + roiName);
 					path2ROI = path2ROIs + roiName + ".zip";
@@ -159,37 +161,23 @@ if ( ! testRun) {
 						print("Opening ROI...");
 						roiManager("Open", path2ROI);
 						nROIs = roiManager("count");
-						Br = 0.2; Ar = 1.0 / ( Math.exp(Br * nROIs) - 1);
-						Bg =0.2; Ag = 1.0 / ( 1.0 - Math.exp(-Br * nROIs) );
-						Bb =0.1; Ab = 1.0 / ( 1.0 - Math.exp(-Br * nROIs) );
 						// Keep track of the slice displayed to add some descriptive text and to make a substack at the end
 						currSlice = 0;
 						subStacks = newArray(); 
-						for (indROI=0; indROI < nROIs; indROI++) {
+						for (indROI=RoiSetCounter; indROI < nROIs; indROI++) {
 							roiManager("Select", indROI);
+							ROIName = Roi.getName;
+							roiManager("Rename", visitID+ "-" + ROIName);
+							print(visitID+ "-" + ROIName);
+							run("Measure Stack...", "channels frames order=tcz");
 							Stack.getPosition(channel, slice, frame); // TODO: From here, get the different slices that the ROI cover, this will be used later to make sub-stacks from that
 							// Identify the current slice and add it to the subStack array, if it is not already in there
 							if (currSlice != slice) {
 								subStacks = Array.concat(subStacks, slice);
 							} // if currSlice != slice - populating subStack
-							R = 128; // After testing, is better to leave the red at half, - Math.round (255.0 * Ar * ( Math.exp( Br * ( nROIs - indROI) ) - 1.0 ) );
-							G = 255; // green up to the maximum, - Math.round( 255.0 * Ag * ( 1.0 - Math.exp( -Bg * (nROIs - indROI) ) ) );
-							B = Math.round( 255.0 * Ab * ( 1.0 - Math.exp( -Bb * indROI ) ) ); // And only move the blue channel
-							if (debugMode) {
-								print(" Colour palette for ROI No " + indROI +":");
-								print("Red: " + R +"\nGreen: " + G +"\nBlue: " + B);
-							} // if debugMode - print colour palette for ROI
-							for (nTimePoints = 0; nTimePoints <= frames; nTimePoints++) {
-								setForegroundColor(R, G, B);
-								Stack.setPosition(channel, slice, nTimePoints);
-								run("Draw", "slice");
-								if (currSlice != slice) {
-									setForegroundColor(39, 59, 135); // iSANDEx colour for the text
-									drawString(currVisit.replace(FILESEP,": ") +  "slice "+String.format("%03.0f", slice) , 10, 30);
-								} // if currSlice != slice to write slice number and file name
-							} // for nTimePoints
 							currSlice = slice; // Update the current slice value
 						} // for indROI
+						RoiSetCounter = nROIs;
 						// TODO: After drawing the ROI in all time frames, make a sub-stack with the slices covered by the ROIs. This should probably be a loop
 						String.resetBuffer;
 						String.append("["); //subStacks[0];
@@ -206,26 +194,15 @@ if ( ! testRun) {
 					} else {
 						print("There is no ROI named " + path2ROI);
 					} // if (File.exists(path2ROI))
-					if (idxVisit <  (listOfVisits.length - 1) ){
-						Dialog.create("Continue?");
-						Dialog.addMessage("Continue to review next Visit?")
-						Dialog.show();
-						// Clean ROI content
-						roiManager("reset");
-						// Reset Results windows
-						close("Results");
-					} // if (idxVisit) - Reset ROI and continue to next visit
-					run("Animation Options...", "speed=2"); // 2fps
-					if (saveAsGif) {
-						// Splits the slices and save each one as an animated gif
-						//saveAs("Gif", 						
-					}
 				} else {
 					print("File " + path2Nifti + " is not a valid image, skipping");
 				} // if (File.exists(path2Nifti))
 				// Close full stack
 				selectImage(niiFileID);
 				close();
+				// Adjust bright and contrast of the substack:
+				selectImage(subStackID);
+				run("Enhance Contrast", "saturated=0.35");
 			} // for idxVisit
 		} // for idxPatient
 	} // for idxTest
@@ -240,6 +217,5 @@ selectWindow("Log");
 print("All done, bye!");
 getDateAndTime(year, month, dayOfWeek, dayOfMonth, hour, minute, second, msec);
 timestamp = String.format("%.0f", year)+String.format("%02.0f", month)+String.format("%02.0f", dayOfMonth) + "T" + String.format("%02.0f", hour) + String.format("%02.0f", minute) + String.format("%02.0f", second);
-saveAs("Text", path2Logs + "IJ_Log_LabelROIs_" + timestamp +".txt" );
-setBatchMode(false);
+saveAs("Text", path2Logs + "IJ_Log_ExploreSingleDataset_" + timestamp +".txt" );
 return;
