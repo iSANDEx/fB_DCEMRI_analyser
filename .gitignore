@@ -402,3 +402,4 @@ FodyWeavers.xsd
 .vscode/settings.json
 ImageJ/LUT.xlsx
 **/*.ipynb_checkpoints/
+.vscode/launch.json
