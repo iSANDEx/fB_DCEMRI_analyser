@@ -12,7 +12,7 @@ REFTEST = "Test000";
 DATA_SUBFLDR = "datasets";
 ROI_LOCATION = "landmarks";
 ROI_FILENAMES = "RoiSet-Frame";
-FIXED_VOLUME = 2;
+//FIXED_VOLUME = 2;
 
 
 // Path to data and analyses output:
@@ -61,14 +61,21 @@ patientsList = List.getList();
 
 // Pickup Test Folder:
 Dialog.create("Select the dataset to review:");
-Dialog.addRadioButtonGroup("1) Select from which test (see description of each test below):", optionList, 1, optionList.length, optionList[optionList.length-1]);
+Dialog.addRadioButtonGroup("1) Select from which test (see description of each test below):", optionList, 1, optionList.length, optionList[0]);
 Dialog.addRadioButtonGroup("2) Select patient name:", patientList , 1, patientList .length, patientList[0]);
+Dialog.addRadioButtonGroup("Reference Volume for registration?", newArray("Pre-Contrast (1)", "1st Post-Contrast (2)"), 1,2,"Pre-Contrast (1)");
 Dialog.show();
 
 List.setList(testsList);
 listOfTests = newArray(listOfTests[List.indexOf(Dialog.getRadioButton)]);
 List.setList(patientsList);
 listOfPatients= newArray(listOfPatients[List.indexOf(Dialog.getRadioButton)]);
+FixedVolume = Dialog.getRadioButton;
+if (FixedVolume=="Pre-Contrast (1)") {
+	FIXED_VOLUME = 1;
+} else if (FixedVolume=="1st Post-Contrast (2)") {
+	FIXED_VOLUME = 2;
+}
 
 for (idxTest = 0; idxTest < listOfTests.length; idxTest++) {
 	print(listOfTests[idxTest]);

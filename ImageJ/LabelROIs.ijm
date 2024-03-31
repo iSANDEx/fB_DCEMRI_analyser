@@ -109,7 +109,7 @@ patientsList = List.getList();
 // Dataset must be selected individually if not run as Batch Process:
 Dialog.create("Select the dataset to review:");
 Dialog.addRadioButtonGroup("1) Select from which test (see description of each test below):", optionList, 1, optionList.length, optionList[0]);
-Dialog.addRadioButtonGroup("2) Select patient name:", patientList , 1, patientList.length, patientList[0]);
+Dialog.addRadioButtonGroup("2) Select patient name:", patientList , 1, patientList.length, patientList[5]);
 Dialog.show();
 
 List.setList(testsList);
@@ -242,4 +242,6 @@ getDateAndTime(year, month, dayOfWeek, dayOfMonth, hour, minute, second, msec);
 timestamp = String.format("%.0f", year)+String.format("%02.0f", month)+String.format("%02.0f", dayOfMonth) + "T" + String.format("%02.0f", hour) + String.format("%02.0f", minute) + String.format("%02.0f", second);
 saveAs("Text", path2Logs + "IJ_Log_LabelROIs_" + timestamp +".txt" );
 setBatchMode(false);
+roiManager("Open", path2Output + "boxROIs.zip");
+
 return;

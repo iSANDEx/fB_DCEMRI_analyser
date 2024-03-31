@@ -22,6 +22,7 @@ close("ROI Manager");
 close("Log");
 close("Results");
 
+macro "ExploreSingleDataset - [a]" {
 // Defines constant parameters:
 FILESEP = File.separator;
 EOFDirList = "/"; // See getFileList description at https://imagej.net/ij/developer/macro/functions.html#G
@@ -39,7 +40,6 @@ LINEWIDTH = 1;
 run("Line Width...", "line="+LINEWIDTH);
 setFont("SansSerif", 20, "antialiased");
 setJustification("left");
-
 
 // Path to data and analyses output:
 homePath= getDirectory("home");
@@ -106,8 +106,8 @@ patientsList = List.getList();
 	
 // Dataset must be selected individually if not run as Batch Process:
 Dialog.create("Select the dataset to review:");
-Dialog.addRadioButtonGroup("1) Select from which test (see description of each test below):", optionList, 1, optionList.length, 0);
-Dialog.addRadioButtonGroup("2) Select patient name:", patientList , 1, patientList .length, 0);
+Dialog.addRadioButtonGroup("1) Select from which test (see description of each test below):", optionList, 1, optionList.length, optionList[1]);
+Dialog.addRadioButtonGroup("2) Select patient name:", patientList , 1, patientList.length, patientList[0]);
 Dialog.show();
 
 List.setList(testsList);
@@ -219,3 +219,5 @@ getDateAndTime(year, month, dayOfWeek, dayOfMonth, hour, minute, second, msec);
 timestamp = String.format("%.0f", year)+String.format("%02.0f", month)+String.format("%02.0f", dayOfMonth) + "T" + String.format("%02.0f", hour) + String.format("%02.0f", minute) + String.format("%02.0f", second);
 saveAs("Text", path2Logs + "IJ_Log_ExploreSingleDataset_" + timestamp +".txt" );
 return;
+
+} // end macro "ExploreSingleDataset"
