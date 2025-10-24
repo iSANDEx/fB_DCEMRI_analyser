@@ -1,0 +1,11 @@
+{
+    "dicom": {
+        "metadatacfg": "dicom_metadata.json"
+    },
+    "path": {
+        "main": "${HOME}/Data/FTV_DCEMRI_Phase02",
+        "raw": "${HOME}/Data/FTV_DCEMRI_Phase02/DICOM",
+        "analysis": "${HOME}/Data/FTV_DCEMRI_Phase02/",
+        "tools": "${HOME}/Developer/fB_DCEMRI_analyser/rice_tools"
+    }
+}

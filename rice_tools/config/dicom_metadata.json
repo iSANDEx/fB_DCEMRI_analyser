@@ -1,0 +1,215 @@
+{
+  "ID": { // "Patient and Study ID"
+    "StudyID": { "hex": "0x00200010" },
+    "PatientName": { "hex": "0x00100010" },
+    "PatientID": { "hex": "0x00100020" }
+  },
+  "SeriesID": { // "Acquisitions and Series ID"
+    "SeriesDescription": {
+      "hex": "0x0008103e"
+    },
+    "SeriesNumber": {
+      "hex": "0x00200011"
+    },
+    "AcquisitionNumber": {
+      "hex": "0x00200012"
+    },
+    "InstanceNumber": {
+      "hex": "0x00200013"
+    },
+    "ImagesInAcquisition": {
+      "hex": "0x00201002"
+    }
+  },
+  "DatesTimes": { // "Dates & Times"
+    "StudyDate": {
+      "hex": "0x00080020"
+    },
+    "StudyTime": {
+      "hex": "0x00080030"
+    },
+    "SeriesDate": {
+      "hex": "0x00080021"
+    },
+    "SeriesTime": {
+      "hex": "0x00080031"
+    },
+    "AcquisitionDate": {
+      "hex": "0x00080022"
+    },
+    "AcquisitionTime": {
+      "hex": "0x00080032"
+    },
+    "AcquisitionDateTime": {
+      "hex": "0x0008002A"
+    },
+    "AcquisitionDuration": { // "Duration of the single continuous gathering of data over a period of time that resulted in this instance, in seconds."
+      "hex": "0x00189073"
+    },
+    "ContentDate": {
+      "hex": "0x00080023"
+    },
+    "ContentTime": {
+      "hex": "0x00080033"
+    },
+    "InstanceCreationDate": {
+      "hex": "0x00080012"
+    },
+    "InstanceCreationTime": {
+      "hex": "0x00080013"
+    },
+    "PerformedProcedureStepEndDate": {
+      "hex": "0x00400250"
+    },
+    "PerformedProcedureStepEndTime": {
+      "hex": "0x00400251"
+    }
+  },
+  "AcqPars": { // "Acquisition Parameters"
+    "ImageType": {
+      "hex": "0x00080008"
+    },
+    "ScanningSequence": {
+      "hex": "0x00180020"
+    },
+    "SequenceVariant": {
+      "hex": "0x00180021"
+    },
+    "ScanOptions": { // "Parameters of scanning sequence."
+      "hex": "0x00180022"
+    },
+    "MRAcquisitionType": {
+      "hex": "0x00180023"
+    },
+    "SequenceName": {
+      "hex": "0x00180024"
+    },
+    "RepetitionTime": {
+      "hex": "0x00180080"
+    },
+    "EchoTime": {
+      "hex": "0x00180081"
+    },
+    "FlipAngle": {
+      "hex": "0x00181314"
+    },
+    "InversionTime": {
+      "hex": "0x00180082"
+    },
+    "NumberOfAverages": {
+      "hex": "0x00180083"
+    },
+    "NumberOfPhaseEncodingSteps": {
+      "hex": "0x00180089"
+    },
+    "EchoTrainLength": {
+      "hex": "0x00180091"
+    },
+    "PercentSampling": {
+      "hex": "0x00180093"
+    },
+    "PercentPhaseFieldOfView": {
+      "hex": "0x00180094"
+    },
+    "PixelBandwidth": {
+      "hex": "0x00180095"
+    },
+    "TriggerTime": {// "Time, in msec, between peak of the R wave and the peak of the echo produced"
+      "hex": "0x00181060"
+    },
+    "InPlanePhaseEncodingDirection": {
+      "hex": "0x00181312"
+    },
+    "TemporalPositionIdentifier": {
+      "hex": "0x00200100"
+    },
+    "NumberOfTemporalPositions": {
+      "hex": "0x00200105"
+    },
+    "TemporalResolution": {
+      "hex": "0x00200110"
+    },
+    "SliceLocation": {
+      "hex": "0x00201041"
+    },
+    "ImagePositionPatient": {
+      "hex": "0x00200032"
+    },
+    "SliceThickness": {
+      "hex": "0x00180050"
+    },
+    "SpacingBetweenSlices": {
+      "hex": "0x00180088"
+    },
+    "ImageOrientationPatient": {
+      "hex": "0x00200037"
+    },
+    "IsoCenterPosition": {
+      "hex": "0x300A012C"
+    }
+  },
+  "ImagePars": { // "Reconstruction/Image Parameters"
+    "AcquisitionMatrix": {
+      "hex": "0x00181310"
+    },
+    "PixelSpacing": {
+      "hex": "0x00280030"
+    },
+    "Rows": {
+      "hex": "0x00280010"
+    },
+    "Columns": {
+      "hex": "0x00280011"
+    },
+    "PixelAspectRatio": {
+      "hex": "0x00280034"
+    },
+    "ReconstructionDiameter": {
+      "hex": "0x00181100"
+    },
+    "RescaleType": {
+      "hex": "0x00281054"
+    },
+    "RescaleIntercept": { // "RI"
+      "hex": "0x00281052"
+    },
+    "RescaleSlope": { // "RS"
+      "hex": "0x00281053"
+    },
+    "PhilipsRWVSlope": { // "Philips Private Attribute"
+      "hex": "0x00409225"
+    },
+    "PhilipsRWVIntercept": { // "WI, Philips Private Attribute"
+      "hex": "0x00409224"
+    },
+    "PhilipsScaleSlope": { // "SS, Philips Private Attribute"
+      "hex": "0x2005100E"
+    },
+    "PhaseNumber": { // "Philips Private Attribute"
+      "hex": "0x20011008"
+    }
+  },
+  "ContrastAgent": { // "Contrast Agent",
+    "ContrastBolusAgent": {
+      "hex": "0x00180010"
+    },
+    "ContrastBolusRoute": {
+      "hex": "0x00181040"
+    },
+    "ContrastBolusVolume": {
+      "hex": "0x00181041"
+    },
+    "ContrastBolusStartTime": {
+      "hex": "0x00181042"
+    },
+    "ContrastBolusStopTime": {
+      "hex": "0x00181043"
+    },
+    "ContrastBolusTotalDose": {
+      "hex": "0x00181044"
+    },
+    "ContrastFlowRate": {
+      "hex": "0x00181046"
+    }
+  }
+}

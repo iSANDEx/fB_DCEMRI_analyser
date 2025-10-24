@@ -1,0 +1,138 @@
+{ // Json Structure such that it can be called just by: ['water_exchange']['pk_kinetics']
+  "FF": {
+    "2CX": {
+      "water_comp": ["vb + vi + vc"],
+      "pk_pars": ["H", "vb", "vi", "Fb", "PS"]
+    },
+    "2CU": {
+      "water_comp": ["vb + vi + vc"],
+      "pk_pars": ["H", "vb", "Fb", "PS"]
+    },
+    "HF": {
+      "water_comp": ["vb + vi + vc"],
+      "pk_pars": ["H", "vb", "vi", "PS"]
+    },
+    "HFU": {
+      "water_comp": ["vb + vi + vc"],
+      "pk_pars": ["H", "vb", "PS"]
+    },
+    "FX": {
+      "water_comp": ["vb + vi + vc"],
+      "pk_pars": ["H", "ve", "Fb"]
+    },
+    "NX": {
+      "water_comp": ["vb + vi + vc"],
+      "pk_pars": ["vb", "Fb"]
+    },
+    "U": {
+      "water_comp": ["vb + vi + vc"],
+      "pk_pars": ["Fb"]
+    },
+    "WV": {
+      "water_comp": ["vb + vi + vc"],
+      "pk_pars": ["H", "vi", "Ktrans"]
+    }
+  },
+  "RR": {
+    "2CX": {
+      "water_comp": ["vb", "vi", "vc"],
+      "pk_pars": ["PSe", "PSc", "H", "vb", "vi", "Fb", "PS"]
+    },
+    "2CU": {
+      "water_comp": ["vb", "vi", "vc"],
+      "pk_pars": ["PSe", "PSc", "H", "vb", "vi", "Fb", "PS"]
+    },
+    "HF": {
+      "water_comp": ["vb", "vi", "vc"],
+      "pk_pars": ["PSe", "PSc", "H", "vb", "vi", "PS"]
+    },
+    "HFU": {
+      "water_comp": ["vb", "vi", "vc"],
+      "pk_pars": ["PSe", "PSc", "H", "vb", "vi", "PS"]
+    },
+    "FX": {
+      "water_comp": ["vb", "vi", "vc"],
+      "pk_pars": ["PSe", "PSc", "H", "vb", "vi", "Fb"]
+    },
+    "NX": {
+      "water_comp": ["vb", "vi", "vc"],
+      "pk_pars": ["PSe", "vb", "vi", "Fb"]
+    },
+    "U": {
+      "water_comp": ["vb", "vi", "vc"],
+      "pk_pars": ["PSe", "vb", "vi", "Fb"]
+    },
+    "WV": {
+      "water_comp": ["vi", "vi+vc"],
+      "pk_pars": ["PSc", "H", "vi", "Ktrans"]
+    }
+  },
+  "RF": {
+    "2CX": {
+      "water_comp": ["vb", "vi+vc"],
+      "pk_pars": ["PSe", "H", "vb", "vi", "Fb", "PS"]
+    },
+    "2CU": {
+      "water_comp": ["vb", "vi+vc"],
+      "pk_pars": ["PSe", "H", "vb", "Fb", "PS"]
+    },
+    "HF": {
+      "water_comp": ["vb", "vi+vc"],
+      "pk_pars": ["PSe", "H", "vb", "vi", "PS"]
+    },
+    "HFU": {
+      "water_comp": ["vb", "vi+vc"],
+      "pk_pars": ["PSe", "H", "vb", "PS"]
+    },
+    "FX": {
+      "water_comp": ["vb", "vi+vc"],
+      "pk_pars": ["PSe", "H", "vb", "vi", "Fb"]
+    },
+    "NX": {
+      "water_comp": ["vb", "vi+vc"],
+      "pk_pars": ["PSe", "vb", "Fb"]
+    },
+    "U": {
+      "water_comp": ["vb", "vi+vc"],
+      "pk_pars": ["PSe", "vb", "Fb"]
+    },
+    "WV": {
+      "water_comp": ["vi+vc"],
+      "pk_pars": ["H", "vi", "Ktrans"]
+    }
+  },
+  "FR": {
+    "2CX": {
+      "water_comp": ["vb+vi", "vc"],
+      "pk_pars": ["PSc", "H", "vb", "vi", "Fb", "PS"]
+    },
+    "2CU": {
+      "water_comp": ["vb+vi", "vc"],
+      "pk_pars": ["PSc", "H", "vb", "vi", "Fb", "PS"]
+    },
+    "HF": {
+      "water_comp": ["vb+vi", "vc"],
+      "pk_pars": ["PSc", "H", "vb", "vi", "PS"]
+    },
+    "HFU": {
+      "water_comp": ["vb+vi", "vc"],
+      "pk_pars": ["PSc", "H", "vb", "vi", "PS"]
+    },
+    "FX": {
+      "water_comp": ["vb+vi", "vc"],
+      "pk_pars": ["PSc", "H", "vb", "vi", "Fb"]
+    },
+    "NX": {
+      "water_comp": ["vb+vi", "vc"],
+      "pk_pars": ["PSc", "vb", "vi", "Fb"]
+    },
+    "U": {
+      "water_comp": ["vb+vi", "vc"],
+      "pk_pars": ["PSc", "vc", "Fb"]
+    },
+    "WV": {
+      "water_comp": ["vi", "vc"],
+      "pk_pars": ["PSc", "H", "vi", "Ktrans"]
+    }
+  }
+}
